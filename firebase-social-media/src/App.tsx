@@ -4,6 +4,7 @@ import './App.css';
 import Main from './pages/Main';
 import Login from './pages/Login';
 import Navbar from './components/Navbar';
+import CreatePost from './pages/create-post/CreatePost';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path='/' Component={Main}/>
           <Route path='/login' Component={Login}/>
+          <Route path='/createpost' Component={CreatePost}/>
         </Routes>
       </Router>
     </div>

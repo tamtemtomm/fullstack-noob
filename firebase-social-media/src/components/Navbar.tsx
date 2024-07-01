@@ -14,7 +14,8 @@ const Navbar = () => {
     <div className="navbar">
       <div className="links">
         <Link to="/">Home Page</Link>
-        <Link to="/login">Login Page</Link>
+        {!user && <Link to="/login">Login Page</Link>}
+        {user && <Link to="/createpost">Create Post</Link>}
       </div>
 
       <div className="user">
