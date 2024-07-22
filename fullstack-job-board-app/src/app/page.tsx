@@ -1,12 +1,22 @@
-import Image from "next/image";
 import Hero from "./components/Hero";
 import Jobs from "./components/Jobs";
 
-export default function Home() {
+import {
+  getSignInUrl,
+  getSignUpUrl,
+  getUser,
+  signOut,
+} from "@workos-inc/authkit-nextjs";
+
+export default async function Home() {
+  const { user } = await getUser();
+  const signInUrl = await getSignInUrl();
+  const signUpUrl = await getSignUpUrl();
+
   return (
-    <div>
+    <>
       <Hero />
-      <Jobs/>
-    </div>
+      <Jobs />
+    </>
   );
 }
