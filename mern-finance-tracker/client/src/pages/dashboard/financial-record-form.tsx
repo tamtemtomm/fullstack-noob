@@ -1,5 +1,6 @@
 import { useUser } from "@clerk/clerk-react";
 import { useState } from "react";
+import { useFinancialRecords } from "../context/financial-records-context";
 
 const FinancialRecordForm = () => {
   const { user } = useUser();
@@ -8,11 +9,12 @@ const FinancialRecordForm = () => {
   const [amount, setAmount] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const {addRecord} = useFinancialRecords()
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const newRecord = {
-      userId: user?.id,
+      userId: user?.id ?? "",
       date: new Date(),
       description: description,
       amount: parseFloat(amount),
@@ -20,7 +22,7 @@ const FinancialRecordForm = () => {
       paymentMethod: paymentMethod,
     };
 
-    // addRecord(newRecord)
+    addRecord(newRecord)
     setDescription("");
     setAmount("");
     setCategory("");
@@ -29,7 +31,7 @@ const FinancialRecordForm = () => {
 
   return (
     <div className="form-container">
-      <form action="">
+      <form action="" onSubmit={handleSubmit}>
         <div className="form-field">
           <label htmlFor="">Description:</label>
           <input
@@ -93,7 +95,7 @@ const FinancialRecordForm = () => {
             <option value="Bank Transfer">Bank Transfer</option>
           </select>
         </div>
-        <button type="submit" className="button" onClick={handleSubmit}>
+        <button type="submit" className="button">
           Add Record
         </button>
       </form>

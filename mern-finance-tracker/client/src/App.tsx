@@ -1,22 +1,27 @@
-
-import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Dashboard from './pages/dashboard'
-import Auth from './pages/auth'
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/dashboard";
+import Auth from "./pages/auth";
+import { FinancialRecordProvider } from "./pages/context/financial-records-context";
 
 function App() {
-
-
   return (
     <Router>
       <div className="app-container">
         <Routes>
-          <Route path='/' element={<Dashboard/>}/>
-          <Route path='/auth' element={<Auth/>}/>
+          <Route
+            path="/"
+            element={
+              <FinancialRecordProvider>
+                <Dashboard />
+              </FinancialRecordProvider>
+            }
+          />
+          <Route path="/auth" element={<Auth />} />
         </Routes>
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
