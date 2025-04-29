@@ -9,7 +9,7 @@ const FinancialRecordForm = () => {
   const [amount, setAmount] = useState<string>("");
   const [category, setCategory] = useState<string>("");
   const [paymentMethod, setPaymentMethod] = useState<string>("");
-  const {addRecord} = useFinancialRecords()
+  const { addRecord } = useFinancialRecords();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -22,7 +22,7 @@ const FinancialRecordForm = () => {
       paymentMethod: paymentMethod,
     };
 
-    addRecord(newRecord)
+    addRecord(newRecord);
     setDescription("");
     setAmount("");
     setCategory("");

@@ -45,7 +45,7 @@ const PreferencesTab = () => {
           soundEnabled ? playMouseOn() : playMouseOff();
         }}
       >
-        {soundEnabled ? (
+        {!soundEnabled ? (
           <VolumeX className="size-[1.2rem] text-muted-foreground" />
         ) : (
           <Volume2 className="size-[1.2rem] text-muted-foreground" />
