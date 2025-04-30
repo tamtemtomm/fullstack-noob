@@ -10,16 +10,18 @@ import { LogOut } from "lucide-react";
 import useSound from "use-sound";
 import { usePreferences } from "@/store/usePreferences";
 import { LogoutLink } from "@kinde-oss/kinde-auth-nextjs/components";
+import { useSelectedUser } from "@/store/useSelectedUser";
 
 interface SidebarProps {
   isCollapsed: boolean;
-  users: User[]
+  users: User[];
 }
 
 const Sidebar = ({ isCollapsed, users }: SidebarProps) => {
-  const selectedUser = USERS[0];
   const [playClickSound] = useSound("/sounds/mouse-click.mp3", { volume: 0.5 });
   const { soundEnabled } = usePreferences();
+
+  const { setSelectedUser, selectedUser } = useSelectedUser();
 
   return (
     <div className="group relative flex flex-col h-full gap-4 p-2 data-[collapsed=true]:p-2 max-h-full overflow-auto bg-background">
@@ -40,6 +42,7 @@ const Sidebar = ({ isCollapsed, users }: SidebarProps) => {
                   <div
                     onClick={() => {
                       soundEnabled && playClickSound();
+                      setSelectedUser(user);
                     }}
                   >
                     <Avatar className="my-1 justify-center items-center">
@@ -75,6 +78,7 @@ const Sidebar = ({ isCollapsed, users }: SidebarProps) => {
               )}
               onClick={() => {
                 soundEnabled && playClickSound();
+                setSelectedUser(user);
               }}
             >
               <Avatar className="flex justify-center items-center">
@@ -86,7 +90,7 @@ const Sidebar = ({ isCollapsed, users }: SidebarProps) => {
                 <AvatarFallback>{user.name[0]}</AvatarFallback>
               </Avatar>
               <div className="flex flex-col max-w-28">
-                <span>{user.name.split(' ')[0]}</span>
+                <span>{user.name.split(" ")[0]}</span>
               </div>
             </Button>
           )

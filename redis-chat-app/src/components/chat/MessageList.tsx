@@ -1,18 +1,43 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { USERS } from "@/db/dummy";
 import { Avatar, AvatarImage } from "../ui/avatar";
-import {messages} from "@/db/dummy";
+import { useSelectedUser } from "@/store/useSelectedUser";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import { useQuery } from "@tanstack/react-query";
+import { getMessages } from "@/actions/message.actions";
 
 const MessageList = () => {
-  const selectedUser = USERS[1];
-  const currentUser = USERS[0];
+  const { selectedUser } = useSelectedUser();
+  const { user: currentUser, isLoading: isUserLoading } =
+    useKindeBrowserClient();
+  const messageContainerRef = useRef<HTMLDivElement>(null);
+
+  const { data: messages, isLoading } = useQuery({
+    queryKey: ["messages", selectedUser?.id],
+    queryFn: async () => {
+      if (selectedUser && currentUser) {
+        const messages = await getMessages(selectedUser?.id, currentUser.id);
+        return messages;
+      }
+    },
+    enabled: !!selectedUser && !!currentUser && !isUserLoading,
+  });
+
+  useEffect(() => {
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTop =
+        messageContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   return (
-    <div className="w-full overflow-y-auto overflow-x-hidden h-full flex flex-col">
+    <div
+      className="w-full overflow-y-auto overflow-x-hidden h-full flex flex-col"
+      ref={messageContainerRef}
+    >
       <AnimatePresence>
-        {messages.map((message, index) => (
+        {messages?.map((message, index) => (
           <motion.div
             key={index}
             layout
@@ -24,7 +49,7 @@ const MessageList = () => {
               layout: {
                 type: "spring",
                 bounce: 0.3,
-                duration: messages.indexOf(message) * 0.05 + 0.2,
+                duration: messages?.indexOf(message) * 0.05 + 0.2,
               },
             }}
             style={{
@@ -33,21 +58,21 @@ const MessageList = () => {
             }}
             className={cn(
               "flex flex-col gap-2 p-4 whitespace-pre-wrap",
-              message.senderId === currentUser.id ? "items-end" : "items-start"
+              message.senderId === currentUser?.id ? "items-end" : "items-start"
             )}
           >
             <div className="flex gap-3 items-center">
-              {message.senderId === selectedUser.id && (
-                <Avatar>
+              {message.senderId === selectedUser?.id && (
+                <Avatar className="flex justify-center items-center">
                   <AvatarImage
-                    src={selectedUser.image}
+                    src={selectedUser?.image || "/user-placeholder.png"}
                     alt="User Image"
-                    className="border-2 border-white rounded-full "
+                    className="border-2 border-white rounded-full"
                   />
                 </Avatar>
               )}
               {message.messageType === "text" ? (
-                <span className="bg-accentp-3 rounded-md max-w-xs">
+                <span className="bg-accent p-3 rounded-md max-w-xs">
                   {message.content}
                 </span>
               ) : (
@@ -57,10 +82,10 @@ const MessageList = () => {
                   className="boreder p-2 rounded h-40 md:h-52 object-cover"
                 />
               )}
-              {message.senderId === currentUser.id && (
+              {message.senderId === currentUser?.id && (
                 <Avatar>
                   <AvatarImage
-                    src={currentUser.image}
+                    src={currentUser?.image || "/user-placeholder.png"}
                     alt="User Image"
                     className="border-2 border-white rounded-full "
                   />

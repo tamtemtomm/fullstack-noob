@@ -23,6 +23,8 @@ const ChatLayout = ({ defaultLayout = [320, 480], users }: ChatLayoutProps) => {
 
   const { selectedUser } = useSelectedUser();
 
+  console.log(selectedUser);
+
   useEffect(() => {
     const checkScreenWidth = () => {
       setIsMobile(window.innerWidth < 768);
@@ -73,9 +75,7 @@ const ChatLayout = ({ defaultLayout = [320, 480], users }: ChatLayoutProps) => {
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-        {selectedUser ? (
-          <MessageContainer />
-        ) : (
+        {!selectedUser && (
           <div className="flex justify-center items-center h-full w-full px-10">
             <div className="flex flex-col justify-center items-center gap-4">
               <img
@@ -89,6 +89,7 @@ const ChatLayout = ({ defaultLayout = [320, 480], users }: ChatLayoutProps) => {
             </div>
           </div>
         )}
+        {selectedUser && <MessageContainer />}
         <MessageContainer />
       </ResizablePanel>
     </ResizablePanelGroup>
