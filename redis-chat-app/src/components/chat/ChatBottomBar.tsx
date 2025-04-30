@@ -31,7 +31,7 @@ const ChatBottomBar = () => {
 
   const { soundEnabled } = usePreferences();
 
-  const [imgUrl, setImgUrl] = useState(null);
+  const [imgUrl, setImgUrl] = useState("");
 
   const [playSound1] = useSound("/sounds/keystroke1.mp3", { volume: 0.2 });
   const [playSound2] = useSound("/sounds/keystroke2.mp3", { volume: 0.2 });
