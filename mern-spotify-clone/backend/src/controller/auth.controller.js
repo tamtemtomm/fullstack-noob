@@ -3,6 +3,9 @@ import { User } from "../models/user.model.js";
 export const authCallback = async (req, res, next) => {
   try {
     // get all the params
+
+    console.log(req.body);
+
     const { id, firstName, lastName, imageUrl } = req.body;
 
     // check if user already exists
@@ -14,7 +17,7 @@ export const authCallback = async (req, res, next) => {
       await User.create({
         clerkId: id,
         fullName: `${firstName}, ${lastName}`,
-        imageUrl,
+        imageUrl: imageUrl,
       });
     }
 
@@ -22,6 +25,6 @@ export const authCallback = async (req, res, next) => {
     res.status(201).json({ success: true });
   } catch (error) {
     console.error("Error in auth callback : ", error);
-    next(error)
+    next(error);
   }
 };

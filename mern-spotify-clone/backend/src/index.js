@@ -19,7 +19,12 @@ const __dirname = path.resolve();
 const app = express();
 
 app.use(express.json()); // to parse req.body
-app.use(cors()); // tp remove cors error
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 app.use(clerkMiddleware()); // this will add auth to req obj => req.user
 app.use(
   fileUpload({
@@ -41,15 +46,12 @@ app.use("/api/stats", statRoutes);
 
 // // error handling
 app.use((err, req, res, next) => {
-  console.error("Error in error handler controller : ", err);
-  return res
-    .status(500)
-    .json({
-      message:
-        process.env.NODE_ENV === "production"
-          ? "Internal server error"
-          : err.message,
-    });
+  return res.status(500).json({
+    message:
+      process.env.NODE_ENV === "production"
+        ? "Internal server error"
+        : err.message,
+  });
 });
 
 // for testing purposes

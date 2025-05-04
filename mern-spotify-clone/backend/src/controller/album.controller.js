@@ -20,7 +20,7 @@ export const getAlbumById = async (req, res, next) => {
     // check if the album exists
     if (!album) res.status(400).json({ message: "Album not found" });
 
-    res.status(200).josn(album);
+    res.status(200).json(album);
   } catch (error) {
     console.error("Error in album/getAlbumId controller : ", error);
     next(error);
